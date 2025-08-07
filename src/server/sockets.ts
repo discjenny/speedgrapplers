@@ -27,6 +27,7 @@ export function installSockets(httpServer: HTTPServer): void {
   const nsp = io.of('/game');
   const roomPlayers = new Map<string, Map<string, { name?: string; color: string }>>();
   const rooms = new Set<string>();
+  const roomHost = new Map<string, string>(); // roomCode -> host socket id
 
   function generateRoomCode(): string {
     const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ234567';
@@ -43,6 +44,7 @@ export function installSockets(httpServer: HTTPServer): void {
       while (rooms.has(code) && guard++ < 20) code = generateRoomCode();
       rooms.add(code);
       socket.join(code);
+      roomHost.set(code, socket.id);
       socket.emit('host:create:ack', { ok: true, roomCode: code });
       roomPlayers.set(code, new Map());
       emitRoomStats(nsp, code, roomPlayers.get(code)!);
@@ -80,7 +82,11 @@ export function installSockets(httpServer: HTTPServer): void {
       const { t } = parsed.data;
       if (typeof socket.data.lastT === 'number' && t < socket.data.lastT) return;
       socket.data.lastT = t;
-      // For M0, no further processing; future: integrate into sim
+      const roomCode: string | undefined = socket.data.roomCode;
+      if (!roomCode) return;
+      const hostId = roomHost.get(roomCode);
+      if (!hostId) return;
+      nsp.to(hostId).emit('host:input', { playerId: socket.id, input: parsed.data });
     });
 
     socket.on('disconnect', () => {
