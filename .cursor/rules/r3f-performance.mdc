@@ -1,0 +1,17 @@
+---
+globs: src/client/**/*.tsx,src/client/**/*.ts
+description: React Three Fiber performance and scene update rules
+---
+
+### Rendering and Performance
+- Clamp device pixel ratio: prefer DPR ≤ 1.5; drop on sustained >22 ms frame time for >1 s.
+- Prefer `<Instances>`/`<Merged>` for repeated decor; avoid hundreds of unique meshes/materials.
+- Avoid creating new objects in `useFrame`; memoize geometries/materials with `useMemo` and reuse vectors.
+- Minimize `<Html>` overlays; prefer in-canvas UI (SDF `<Text>`) or top-level DOM outside canvas.
+- Keep postprocessing minimal; gate heavy effects behind a perf toggle.
+
+### Game Loop and State
+- Decouple render from physics; physics runs at fixed 60 Hz using an accumulator; render as fast as possible.
+- Source of truth for transforms is physics; write to Three only when needed; avoid redundant state.
+- Use minimal selectors or local state to reduce React re-renders in canvas subtree.
+

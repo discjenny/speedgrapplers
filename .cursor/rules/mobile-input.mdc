@@ -1,0 +1,18 @@
+---
+globs: src/client/routes/controller/**/*.tsx
+description: Mobile controller input, pointer events, coalescing, haptics
+---
+
+### Events and Surfaces
+- Use Pointer Events; set `touch-action: none` on interactive surfaces; listeners with `passive: false` where `preventDefault` is required.
+- Disable text selection on buttons and controls.
+
+### Sampling and Quantization
+- Sample input in `requestAnimationFrame`; coalesce events per frame.
+- Apply deadzone 0.12, outer deadband 0.05; quantize axes to int8 [-127..127].
+- Emit inputs at 60 Hz (downshift to 30 Hz under bandwidth pressure).
+
+### Haptics and Wake Lock
+- Feature-detect `navigator.vibrate`; use short patterns for tick/hit/boost on user gestures.
+- Request Screen Wake Lock on user action and re-acquire on `visibilitychange`.
+

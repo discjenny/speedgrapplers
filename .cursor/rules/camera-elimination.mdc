@@ -1,0 +1,13 @@
+---
+globs: src/client/game/**/*.ts
+description: Camera follow, zoom smoothing, and elimination thresholds
+---
+
+### Camera
+- Follow the front 50% of active players; bias toward leader along X.
+- Smooth position with a critically damped spring (~3 Hz) and zoom (~1.5 Hz); keep all active players in frame with ~20% padding.
+
+### Elimination
+- Eliminate when a player leaves the safe frame by >12% of viewport for >0.8 s.
+- If stalemate >15 s, shrink padding by ~1%/s down to minimum; end when one remains or finish is crossed.
+

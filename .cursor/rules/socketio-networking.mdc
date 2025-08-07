@@ -1,0 +1,21 @@
+---
+globs: src/server/**/*.ts,src/client/net/**/*.ts,src/shared/**/*.ts
+description: Socket.IO rooms, transports, payloads, validation, and timing
+---
+
+### Topology
+- Single namespace `/game`; one Socket.IO room per `roomCode`.
+- Production transports: WebSocket-only; enable long-polling only in dev if needed.
+
+### Rates and Payloads
+- Controller inputs at 60 Hz (auto-throttle to 30 Hz); int8 axes in [-127..127], buttons as bitmask; include client `t`.
+- Host sim at 60 Hz; broadcast HUD snapshots at 15 Hz with host time `t`.
+
+### Validation and Limits
+- Zod-validate all inbound events; clamp out-of-range; enforce monotonic `t` per socket.
+- Rate limit per socket: soft 120 msgs/s; hard drop ≥ 200 msgs/s; kick on sustained abuse.
+
+### Resilience and Security
+- Reconnection token to re-bind `playerId` within an active room.
+- Accept LAN/private addresses only by default; reject non-private remote addresses.
+

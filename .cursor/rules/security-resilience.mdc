@@ -1,0 +1,16 @@
+---
+globs: src/server/**/*.ts
+description: LAN-only guardrails, validation, rate limiting, and privacy
+---
+
+### Acceptance
+- Accept only connections from private IPv4 ranges by default; reject public/external addresses.
+
+### Validation and Limits
+- Zod-validate all inbound payloads; clamp ranges; enforce monotonic timestamps.
+- Soft 120 msgs/s per socket; hard drop at 200 msgs/s; kick on repeated abuse.
+
+### Privacy and Tokens
+- No PII stored; controller preferences remain local to device.
+- Rejoin tokens are room-scoped and invalid after room close.
+

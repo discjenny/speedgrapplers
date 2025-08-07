@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "meta": { "id": "intro_01", "difficulty": 1 },
+  "tiles": [
+    { "type": "box",  "pos": [0, 0, 0],  "size": [12, 1, 2] }
+  ],
+  "anchors": [
+    { "pos": [6, 5, 0], "radius": 1.2, "coneDeg": 55, "autoRange": 12 }
+  ],
+  "spawns": [ { "pos": [1, 2, 0] }, { "pos": [1.5, 2, 0] }, { "pos": [2, 2, 0] }, { "pos": [2.5, 2, 0] } ],
+  "decor": []
+}
+
+
+

@@ -1,0 +1,16 @@
+---
+globs: tools/assets/**/*.ts,src/client/assets/**/*.json
+description: Level JSON, decor manifest, HDRI usage, and validation
+---
+
+### Levels and Decor
+- Levels are JSON primitives with anchors and spawns; colliders are implicit from primitives.
+- Maintain `assets.manifest.json` mapping decor ids to local GLB paths; avoid hardcoded paths in components.
+
+### Loading
+- Dynamic-import HDRIs from `@pmndrs/assets`; dynamic-import large models.
+- Use `useGLTF.preload` for upcoming levels/screens.
+
+### Validation
+- Provide a schema/validator for levels; check tile intersections and anchor spacing in a tool.
+

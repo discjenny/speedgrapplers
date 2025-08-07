@@ -1,0 +1,31 @@
+---
+alwaysApply: true
+description: High-level architecture, routes, and file layout for SpeedGrapplers
+---
+
+### Architecture and Routes
+- TV host app at `/` renders the game (R3F) and runs authoritative simulation.
+- Controller PWA at `/controller` provides mobile inputs.
+- Single Node/Express server on `:4000` serves Socket.IO and static build in prod; Vite dev on `:5173` with proxy.
+
+### Ports and Paths
+- Dev: Vite `5173` → proxy `/socket.io` to `http://localhost:4000`.
+- Prod: Express serves `dist/` and hosts Socket.IO at `/socket.io`.
+
+### Expected Layout
+```
+/src
+  /server            // Express + Socket.IO
+  /client            // React app (TV + controller)
+    /routes/tv       // TV host screens
+    /routes/controller // Controller PWA
+    /game            // Simulation, physics, camera, items
+    /net             // Socket.IO client wrappers
+    /state           // Zustand stores
+    /assets          // Level JSON, decor manifest
+/shared              // Shared TS types (events, payloads)
+/tools               // Asset/level tools
+```
+
+See the detailed spec for constraints and defaults: [SPEEDRUNNERS-R3F-SPEC.md](mdc:SPEEDRUNNERS-R3F-SPEC.md)
+

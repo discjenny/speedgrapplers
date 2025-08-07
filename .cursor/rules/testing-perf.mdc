@@ -1,0 +1,13 @@
+---
+globs: **/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/*.spec.tsx
+description: Testing targets and performance acceptance criteria
+---
+
+### Tests
+- Join/ack/reconnect/token flows; input rate throttle; snapshot cadence.
+- Controller UI: pointer events for stick/buttons; haptic calls mocked.
+- R3F: mount minimal scenes to assert materials/geometry and hook behavior.
+
+### Performance Checks (TV)
+- Target ≥ 60 FPS on TV; GC pauses < 8 ms under load; cap DPR ≤ 1.5 and drop on sustained spikes.
+

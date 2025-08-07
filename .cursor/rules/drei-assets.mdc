@@ -1,0 +1,13 @@
+---
+globs: src/client/**/*.tsx
+description: Drei helpers usage for assets, environment, and UI
+---
+
+### Assets and Environment
+- Use `useGLTF` with `useGLTF.preload` for known assets/routes; rely on Suspense.
+- Load HDRI via dynamic import from `@pmndrs/assets` and `<Environment files={exr} />`.
+- Avoid heavy reflective helpers on low-spec hardware; gate with a perf flag.
+
+### UI
+- Use `<Text>` (SDF) for labels where possible; reserve `<Html>` for complex DOM HUD only when necessary.
+

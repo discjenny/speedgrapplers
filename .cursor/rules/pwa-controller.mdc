@@ -1,0 +1,16 @@
+---
+globs: vite.config.ts,src/client/routes/controller/**/*.tsx,public/manifest.json
+description: Controller-only PWA scope, caching, orientation, and updates
+---
+
+### Scope and Registration
+- Limit service worker scope to `/controller/`; do not intercept `/socket.io`.
+- Use `registerType: 'autoUpdate'` once stable; consider prompt flow initially.
+
+### Manifest and UX
+- `display: standalone`, `orientation: landscape`; iOS orientation is best-effort—show portrait overlay.
+- Respect safe-area insets; provide clear install and wake-lock prompts.
+
+### Caching
+- Cache app shell and static assets for controller UI; mark Socket.IO as `NetworkOnly`.
+

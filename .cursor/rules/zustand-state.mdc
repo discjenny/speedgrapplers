@@ -1,0 +1,11 @@
+---
+globs: src/client/state/**/*.ts,src/client/**/*.tsx
+description: Zustand store structure, selectors, and persistence
+---
+
+### Store Design
+- Split stores into slices (UI, networking, simulation interface) and compose.
+- Use `subscribeWithSelector` and minimal selectors; apply shallow equality where helpful.
+- Persist only controller preferences (name, southpaw, deadzone); never persist authoritative simulation state.
+- Type actions and state; avoid exposing raw setters for complex updates.
+

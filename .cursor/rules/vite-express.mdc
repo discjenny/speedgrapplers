@@ -1,0 +1,17 @@
+---
+globs: vite.config.ts,src/server/**/*.ts
+description: Vite dev proxy and Express production server patterns
+---
+
+### Dev
+- Proxy `/socket.io` to `http://localhost:4000` with `ws: true`.
+- Use `VITE_SOCKET_URL` env for client overrides when not on same host.
+
+### Prod
+- Serve `dist/` and Socket.IO from the same HTTP server instance.
+- Add `helmet`, `compression`, and LAN-only CORS.
+
+### Build
+- Code-split `/controller` route; dynamic-import heavy assets/HDRIs.
+- Set `build.target` to support baseline browsers specified in the spec.
+

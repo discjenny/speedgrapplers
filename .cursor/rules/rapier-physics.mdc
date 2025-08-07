@@ -1,0 +1,20 @@
+---
+globs: src/client/game/**/*.ts,src/client/game/**/*.tsx
+description: Rapier world configuration, constraints, collisions, and grapple rules
+---
+
+### World and Bodies
+- Fixed timestep 60 Hz; enable CCD on fast-moving runner bodies; sleep inactive bodies.
+- Lock Z: freeze Z translation and allow only Z rotation for 2.5D.
+
+### Collisions and Groups
+- Use simple primitive colliders for gameplay; exclude decor via collision groups/masks.
+- Prefer impulses/forces over setting translations; only set translation for teleports/resets.
+
+### Grapple
+- Use a joint/spring to emulate rope tension; clamp rope length; tune frequency/damping.
+- Render rope visuals independently (verlet/rod); do not drive physics from visuals.
+
+### Stability
+- After teleports, temporarily relax CCD/contacts for one step to avoid tunneling at spawn.
+
