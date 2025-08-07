@@ -20,7 +20,7 @@ type GameState = {
   setPhase: (p: Phase) => void;
 };
 
-export const useGameStore = create<GameState>((set, get) => ({
+export const useGameStore = create<GameState>((set) => ({
   phase: 'lobby',
   players: new Map(),
   upsertPlayer: (player) => set((s) => {

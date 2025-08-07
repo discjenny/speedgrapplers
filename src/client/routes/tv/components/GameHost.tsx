@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { Color } from 'three';
-import { RigidBody, CapsuleCollider, Physics, RigidBodyApi } from '@react-three/rapier';
+import { RigidBody, CapsuleCollider, Physics } from '@react-three/rapier';
+// Narrowed interface to avoid type issues across versions
+type RigidBodyApi = {
+  linvel(): { x: number; y: number; z: number };
+  setLinvel(v: { x: number; y: number; z: number }, wake?: boolean): void;
+  translation(): { x: number; y: number; z: number };
+};
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../../../state/useGameStore';
+import type { PlayerInput } from '../../../state/useGameStore';
 import { socket } from '../../../net/socketClient';
 import type { RoomStats } from '../../../../shared/events';
 import { PLAYER_HEIGHT, PLAYER_RADIUS } from '../../../game/constants';
@@ -16,8 +22,21 @@ export function GameHost(): JSX.Element {
         useGameStore.getState().upsertPlayer({ id: p.id, color: p.color ?? '#fff', input: null })
       );
     };
-    const onInput = ({ playerId, input }: { playerId: string; input: any }) => {
-      useGameStore.getState().applyInput(playerId, input);
+    const isPlayerInput = (v: unknown): v is PlayerInput => {
+      if (!v || typeof v !== 'object') return false;
+      const o = v as Record<string, unknown>;
+      return (
+        typeof o.t === 'number' &&
+        typeof o.ax === 'number' &&
+        typeof o.ay === 'number' &&
+        typeof o.buttons === 'number'
+      );
+    };
+
+    const onInput = ({ playerId, input }: { playerId: string; input: unknown }) => {
+      if (isPlayerInput(input)) {
+        useGameStore.getState().applyInput(playerId, input);
+      }
     };
     socket.on('room:stats', upsertFromStats);
     socket.on('host:input', onInput);
@@ -51,7 +70,7 @@ export function GameHost(): JSX.Element {
       <group>
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 10, 5]} intensity={0.8} />
-        <gridHelper args={[40, 40, new Color('#334155'), new Color('#1f2937')]} />
+        <gridHelper args={[40, 40, '#334155', '#1f2937']} />
         <Level levelId="intro_01" />
 
         {players.map((p, i) => (

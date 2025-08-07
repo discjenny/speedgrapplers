@@ -13,6 +13,8 @@ module.exports = {
   settings: { react: { version: 'detect' } },
   rules: {
     'react/react-in-jsx-scope': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    'react/no-unknown-property': 'off',
   },
   ignorePatterns: ['dist', 'node_modules']
 };

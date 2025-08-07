@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RigidBody, CuboidCollider } from '@react-three/rapier';
 
 type Vec3 = [number, number, number];
@@ -13,7 +13,7 @@ type LevelJson = {
   tiles: Tile[];
   anchors: { pos: Vec3; radius: number; coneDeg: number; autoRange: number }[];
   spawns: { pos: Vec3 }[];
-  decor: any[];
+  decor: unknown[];
 };
 
 async function loadLevelJson(levelId: string): Promise<LevelJson> {
