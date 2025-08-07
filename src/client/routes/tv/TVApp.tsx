@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { GameHost } from './components/GameHost';
 import { CameraRig } from './components/CameraRig';
+import { HUD } from './HUD';
 import { socket } from '../../net/socketClient';
 import type { RoomStats } from '../../../shared/events';
 
@@ -63,6 +64,7 @@ export default function TVApp(): JSX.Element {
         <div>Room: <span className="font-mono">{roomCode}</span></div>
         <div>Controllers: {players.length}</div>
       </div>
+      <HUD />
     </div>
   );
 }

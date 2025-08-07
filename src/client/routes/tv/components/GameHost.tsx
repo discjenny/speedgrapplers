@@ -5,6 +5,7 @@ type RigidBodyApi = {
   linvel(): { x: number; y: number; z: number };
   setLinvel(v: { x: number; y: number; z: number }, wake?: boolean): void;
   translation(): { x: number; y: number; z: number };
+  setTranslation(v: { x: number; y: number; z: number }, wake?: boolean): void;
 };
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../../../state/useGameStore';
@@ -57,14 +58,18 @@ export function GameHost(): JSX.Element {
       const vx = axisToUnit(state.input.ax) * 8;
       const lin = api.linvel();
       api.setLinvel({ x: vx, y: lin.y, z: 0 }, true);
-      const y = api.translation().y;
+      const posNow = api.translation();
+      const y = posNow.y;
       const onGround = y <= 1.8; // crude ground check against our ground collider
       if (onGround && (state.input.pressed ?? 0) & BUTTON_JUMP) {
         api.setLinvel({ x: vx, y: 10, z: 0 }, true);
       }
+      // fail-safe: if a body ever dips too low, lift it
+      if (y < -5) {
+        api.setTranslation({ x: posNow.x, y: 2, z: posNow.z }, true);
+      }
       // record transform snapshot for camera
-      const pos = api.translation();
-      useGameStore.getState().setTransform(id, [pos.x, pos.y, pos.z]);
+      useGameStore.getState().setTransform(id, [posNow.x, posNow.y, posNow.z]);
     });
   });
 
@@ -85,9 +90,10 @@ export function GameHost(): JSX.Element {
             }}
             position={[i * 1.2, 2, 0]}
             colliders={false}
+            ccd
             enabledRotations={[false, false, false]}
           >
-            <CapsuleCollider args={[PLAYER_HEIGHT / 2, PLAYER_RADIUS]} />
+            <CapsuleCollider args={[PLAYER_HEIGHT / 2 - PLAYER_RADIUS, PLAYER_RADIUS]} />
             <mesh>
               <capsuleGeometry args={[PLAYER_RADIUS, PLAYER_HEIGHT - 2 * PLAYER_RADIUS, 8, 16]} />
               <meshStandardMaterial color={p.color} />

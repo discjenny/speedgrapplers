@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { RigidBody, CuboidCollider } from '@react-three/rapier';
 
 type Vec3 = [number, number, number];
@@ -51,6 +51,28 @@ export function Level({ levelId }: { levelId: string }): JSX.Element | null {
           return null;
         })}
       </RigidBody>
+      {/* simple visual meshes for tiles */}
+      {level.tiles.map((tile, i) => {
+        const color = tile.type === 'box' ? '#334155' : tile.type === 'ceil' ? '#475569' : '#64748b';
+        if (tile.type === 'box' || tile.type === 'ceil') {
+          return (
+            <mesh key={`m${i}`} position={tile.pos}>
+              <boxGeometry args={tile.size} />
+              <meshStandardMaterial color={color} />
+            </mesh>
+          );
+        }
+        if (tile.type === 'ramp') {
+          const rot = [0, 0, (tile.angleDeg * Math.PI) / 180] as [number, number, number];
+          return (
+            <mesh key={`m${i}`} position={tile.pos} rotation={rot}>
+              <boxGeometry args={tile.size} />
+              <meshStandardMaterial color={color} />
+            </mesh>
+          );
+        }
+        return <Fragment key={`m${i}`} />;
+      })}
     </group>
   );
 }
