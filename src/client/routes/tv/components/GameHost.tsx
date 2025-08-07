@@ -62,6 +62,9 @@ export function GameHost(): JSX.Element {
       if (onGround && (state.input.pressed ?? 0) & BUTTON_JUMP) {
         api.setLinvel({ x: vx, y: 10, z: 0 }, true);
       }
+      // record transform snapshot for camera
+      const pos = api.translation();
+      useGameStore.getState().setTransform(id, [pos.x, pos.y, pos.z]);
     });
   });
 

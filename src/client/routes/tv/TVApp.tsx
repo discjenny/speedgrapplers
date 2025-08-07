@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { GameHost } from './components/GameHost';
+import { CameraRig } from './components/CameraRig';
 import { socket } from '../../net/socketClient';
 import type { RoomStats } from '../../../shared/events';
 
@@ -55,6 +56,7 @@ export default function TVApp(): JSX.Element {
           </Suspense>
         )}
         <GameHost />
+        <CameraRig />
       </Canvas>
       <div className="absolute left-4 top-4 text-sm opacity-90 select-none">
         <div className="font-semibold">SpeedGrapplers</div>
