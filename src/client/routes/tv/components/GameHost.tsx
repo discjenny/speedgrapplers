@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { Color } from 'three';
-import { RigidBody, CapsuleCollider, Physics, RigidBodyApi, CuboidCollider } from '@react-three/rapier';
+import { RigidBody, CapsuleCollider, Physics, RigidBodyApi } from '@react-three/rapier';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../../../state/useGameStore';
 import { socket } from '../../../net/socketClient';
 import type { RoomStats } from '../../../../shared/events';
 import { PLAYER_HEIGHT, PLAYER_RADIUS } from '../../../game/constants';
 import { BUTTON_JUMP, axisToUnit } from '../../../game/input';
+import { Level } from '../../../game/Level';
 
 export function GameHost(): JSX.Element {
   useEffect(() => {
@@ -48,15 +49,10 @@ export function GameHost(): JSX.Element {
   return (
     <Physics gravity={[0, -35, 0]}>
       <group>
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[5, 10, 5]} intensity={0.8} />
         <gridHelper args={[40, 40, new Color('#334155'), new Color('#1f2937')]} />
-        {/* Ground plane */}
-        <RigidBody type="fixed" position={[0, 0, 0]} colliders={false}>
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-            <planeGeometry args={[200, 200]} />
-            <meshStandardMaterial color="#0b0d12" />
-          </mesh>
-          <CuboidCollider args={[100, 0.1, 10]} position={[0, -0.05, 0]} />
-        </RigidBody>
+        <Level levelId="intro_01" />
 
         {players.map((p, i) => (
           <RigidBody
